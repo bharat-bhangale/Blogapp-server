@@ -21,10 +21,23 @@ const dburl = process.env.MONGO_URL;
 const port = process.env.PORT || 8080;
 
 // app.use(cors({ credentials: true, origin: "http://localhost:3000" }));
-const corsOptions = {
-  origin: ['https://blogapp-client-3e66.onrender.com', 'http://localhost:3000'], // Add other domains as needed
-  optionsSuccessStatus: 200 // some legacy browsers (IE11, various SmartTVs) choke on 204
-};
+// const corsOptions = {
+//   origin: ['https://blogapp-client-3e66.onrender.com', 'http://localhost:3000'], // Add other domains as needed
+//   optionsSuccessStatus: 200 // some legacy browsers (IE11, various SmartTVs) choke on 204
+// };
+const allowedOrigins = ['http://localhost:3000', 'https://blogapp-client-3e66.onrender.com'];
+
+app.use(cors({
+  origin: function (origin, callback) {
+    if (!origin) return callback(null, true);
+    if (allowedOrigins.indexOf(origin) === -1) {
+      const msg = 'The CORS policy for this site does not allow access from the specified origin.';
+      return callback(new Error(msg), false);
+    }
+    return callback(null, true);
+  },
+  credentials: true
+}));
 
 app.use(cors(corsOptions));
 app.use(express.json());
