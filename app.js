@@ -20,7 +20,13 @@ const secret = process.env.SECRET;
 const dburl = process.env.MONGO_URL;
 const port = process.env.PORT || 8080;
 
-app.use(cors({ credentials: true, origin: "http://localhost:3000" }));
+// app.use(cors({ credentials: true, origin: "http://localhost:3000" }));
+const corsOptions = {
+  origin: ['https://blogapp-client-3e66.onrender.com', 'http://localhost:3000'], // Add other domains as needed
+  optionsSuccessStatus: 200 // some legacy browsers (IE11, various SmartTVs) choke on 204
+};
+
+app.use(cors(corsOptions));
 app.use(express.json());
 app.use(cookieParser());
 app.use("/uploads", express.static(path.join(__dirname, "/uploads")));
